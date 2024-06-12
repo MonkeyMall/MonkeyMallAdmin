@@ -61,5 +61,61 @@ export default [
         }
       }
     ]
+  },{
+    path: "/finance",
+    component: layout,
+    redirect: "/finance/user",
+    alwaysShow: true, // will always show the root menu
+    name: "finance",
+    meta: {
+      title: "财务管理",
+      icon: "article"
+    },
+    children: [
+      {
+        path: "/user",
+        component: () => import("@/views/system/user.vue"),
+        name: "financeUser",
+        meta: {
+          title: "用户管理", icon: "article-ranking"
+        }
+      },
+      {
+        path: "/order",
+        component: () => import("@/views/system/order.vue"),
+        name: "financeOrder",
+        meta: {
+          title: "订单管理", icon: "article-ranking"
+        }
+      }
+    ]
+  },{
+    path: "/system",
+    component: layout,
+    redirect: "/system/gs",
+    alwaysShow: true, // will always show the root menu
+    name: "system",
+    meta: {
+      title: "系统管理",
+      icon: "article"
+    },
+    children: [
+      {
+        path: "/gs",
+        component: () => import("@/views/system/gs.vue"),
+        name: "systemGs",
+        meta: {
+          title: "公司分类", icon: "article-ranking"
+        }
+      },
+      {
+        path: "/sp",
+        component: () => import("@/views/system/sp.vue"),
+        name: "systemSp",
+        meta: {
+          title: "商品分类", icon: "article-ranking"
+        }
+      }
+    ]
   }
 ];
