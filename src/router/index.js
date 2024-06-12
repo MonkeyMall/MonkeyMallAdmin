@@ -5,19 +5,19 @@ import {
 import store from "@/store";
 
 import layout from "@/layout";
+import marketing from "./modules/marketing";
+// import compony from "./modules/compony";
+// import shopping from "./modules/shopping";
 import permissions from "./modules/permissions";
-import third from "./modules/third";
-import cssAnimation from "./modules/cssAnimation";
-import vueUse from "./modules/vueUse";
 
 /**
  * 私有路由表
  */
 export const privateRoutes = [
+	...marketing,
+  // compony,
+  // shopping,
 	permissions,
-	third,
-	cssAnimation,
-	vueUse
 ];
 /**
  * 公开路由表
@@ -51,12 +51,13 @@ export const publicRoutes = [
 				component: () => import("@/views/error-page/401")
 			}
 		]
-	}
+	},
 	// 测试页面
 	// {
-	//     path: '/test',
-	//     component: () => import('@/views/test-page/test'),
-	//
+  //   path: '/test',
+  //   component: layout,
+  //   component: () => import('@/views/css-animation/shootingStar.vue'),
+	
 	// },
 ];
 
@@ -81,8 +82,8 @@ export function resetRouter() {
 
 const router = createRouter({
 	history: createWebHashHistory(),
-	// routes: [...publicRoutes, ...privateRoutes]
-	routes: publicRoutes
+	routes: [...publicRoutes, ...privateRoutes],
+	// routes: publicRoutes
 
 });
 
