@@ -3,10 +3,10 @@
 		<div class="logo-container">
 			<el-avatar
 				:size="logoHeight"
-				src="https://osstest.eetop.com/bewt365/578d0d88e7ad2f9ae99f10eee8e08d9c.jpg"
+				src="../../../assets/yuan.jpg"
 			/>
 			<h1 v-if="$store.getters.sidebarOpened" class="logo-title">
-				Vue3后台系统
+				猿社区
 			</h1>
 		</div>
 		<el-scrollbar>
@@ -21,7 +21,8 @@
   justify-content: center;
   align-items: center;
   padding: 10px 0 22px;
-  height: v-bind(logoheight) + "px";
+  height: 32px;
+  height: 32px;
   .logo-title {
     margin-left: 10px;
     line-height: 50px;

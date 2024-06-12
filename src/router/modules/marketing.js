@@ -33,7 +33,7 @@ export default [
     },
     children: [
       {
-        path: "/index",
+        path: "/compony/index",
         component: () => import("@/views/compony/index.vue"),
         name: "componyList",
         meta: {
@@ -73,16 +73,16 @@ export default [
     },
     children: [
       {
-        path: "/user",
-        component: () => import("@/views/system/user.vue"),
+        path: "/finance/user",
+        component: () => import("@/views/finance/user.vue"),
         name: "financeUser",
         meta: {
           title: "用户管理", icon: "article-ranking"
         }
       },
       {
-        path: "/order",
-        component: () => import("@/views/system/order.vue"),
+        path: "/finance/order",
+        component: () => import("@/views/finance/order.vue"),
         name: "financeOrder",
         meta: {
           title: "订单管理", icon: "article-ranking"
