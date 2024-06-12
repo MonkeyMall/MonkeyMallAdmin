@@ -81,7 +81,7 @@
               <el-input v-model="formAddOrEdit.name" placeholder="请输入公司名" />
             </el-form-item>
             <el-form-item label="logo：">
-              <el-input v-model="formAddOrEdit.name" placeholder="请输入公司logo" />
+              <el-input v-model="formAddOrEdit.logo" placeholder="请输入公司logo" />
             </el-form-item>
             <el-form-item label="地址：">
               <el-input v-model="formAddOrEdit.address" placeholder="请输入公司地址" />
@@ -133,7 +133,7 @@
         <template #footer>
           <div class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">
+            <el-button type="primary" @click="submitFormFn">
               提交
             </el-button>
           </div>
@@ -142,7 +142,8 @@
     </template>
   </CommonLayout>
 </template>
-<script lang="ts" setup>
+<script setup>
+import { addCompony, listCompony } from "@/api/compony.js";
 import CommonLayout from '@/components/CommonLayout'
 // import Editor from "../components/Editor.vue";
 // import { ref } from "vue";
@@ -154,7 +155,7 @@ import CommonLayout from '@/components/CommonLayout'
 // 	console.log("onSuccess");
 // };
 
-import { reactive, ref } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 const queryForm = reactive({
   name: ''
 })
@@ -167,21 +168,11 @@ const goRouter = () => {
 const resetFn = () => {
   console.log('resetFn')
 }
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: '向导网优先公司',
-    industry: '通信',
-    scale: '100-500人',
-    accumulation: '是',
-    insurance: '是',
-    welfare: '双休',
-    address: '太原市万柏林区下元商厦',
-  }
-]
-const formAddOrEdit = [
+const tableData = reactive([])
+const formAddOrEdit = reactive([
   {
     name: '', // 公司名
+    logo: '',
     industry: '', // 行业
     scale: '', // 规模
     accumulation: '', // 公积金
@@ -189,7 +180,7 @@ const formAddOrEdit = [
     welfare: '', // 福利
     address: '', // 位置
   }
-]
+])
 const scaleList = [{
   label: '100-500人',
   value: '100-500人'
@@ -232,13 +223,37 @@ const handleCurrentChange = (val) => {
 }
 
 
-const handleClose = (done: () => void) => {
+const handleClose = () => {
   ElMessageBox.confirm('Are you sure to close this dialog?')
     .then(() => {
-      done()
+      console.log(123)
     })
     .catch(() => {
       // catch error
     })
 }
+const submitFormFn = async () => {
+  await addCompony({
+    name: formAddOrEdit.name, // 公司名
+    logo: formAddOrEdit.logo,
+    industry: formAddOrEdit.industry, // 行业
+    scale: formAddOrEdit.scale, // 规模
+    accumulation: formAddOrEdit.accumulation, // 公积金
+    insurance: formAddOrEdit.insurance, // 五险
+    welfare: formAddOrEdit.welfare, // 福利
+    address: formAddOrEdit.address // 位置
+  })
+}
+const getList = async () => {
+  const data = await listCompony({
+    limte: 10,
+    page: 1
+  })
+  console.log('list', data)
+  tableData.push(...data)
+  return {
+    ...toRefs(tableData)
+  }
+}
+getList()
 </script>
