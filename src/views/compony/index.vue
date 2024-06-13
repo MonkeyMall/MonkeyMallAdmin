@@ -45,8 +45,8 @@
         <el-table-column label="福利" prop="welfare" width="180" />
         <el-table-column label="创建时间" prop="date" />
         <el-table-column fixed="right" label="操作" width="120">
-          <template #default>
-            <el-button link type="primary" size="small" @click="createFn('edit')">
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click="createFn('edit', scope.row)">
               编辑
             </el-button>
             <!-- <el-button link type="primary" size="small">删除</el-button> -->
@@ -63,7 +63,7 @@
           :disabled="disabled"
           :background="background"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
@@ -143,7 +143,7 @@
   </CommonLayout>
 </template>
 <script setup>
-import { addCompony, listCompony } from "@/api/compony.js";
+import { addCompony, editCompony, listCompony } from "@/api/compony.js";
 import CommonLayout from '@/components/CommonLayout'
 // import Editor from "../components/Editor.vue";
 // import { ref } from "vue";
@@ -204,13 +204,23 @@ const total = ref(0)
 import { ElMessageBox } from 'element-plus'
 const dialogVisible = ref(false)
 const isAdd = ref(true)
-
-const createFn = (type) => {
+const editId = ref('')
+// 点击创建或者编辑按钮
+const createFn = (type, item) => {
   console.log('创建、编辑')
   if (type === 'add') {
     isAdd.value = true
   } else {
     isAdd.value = false
+    editId.value = item._id
+    formAddOrEdit.name = item.name, // 公司名
+    formAddOrEdit.logo = item.logo,
+    formAddOrEdit.industry = item.industry, // 行业
+    formAddOrEdit.scale = item.scale, // 规模
+    formAddOrEdit.accumulation = item.accumulation, // 公积金
+    formAddOrEdit.insurance = item.insurance, // 五险
+    formAddOrEdit.welfare = item.welfare, // 福利
+    formAddOrEdit.address = item.address // 位置
   }
   dialogVisible.value = true
 }
@@ -222,35 +232,56 @@ const handleCurrentChange = (val) => {
   console.log('handleCurrentChange', val)
 }
 
-
+// 关闭弹框
 const handleClose = () => {
-  ElMessageBox.confirm('Are you sure to close this dialog?')
-    .then(() => {
-      console.log(123)
-    })
-    .catch(() => {
-      // catch error
-    })
+  dialogVisible.value = false
 }
+// 修改或者编辑
 const submitFormFn = async () => {
-  await addCompony({
-    name: formAddOrEdit.name, // 公司名
-    logo: formAddOrEdit.logo,
-    industry: formAddOrEdit.industry, // 行业
-    scale: formAddOrEdit.scale, // 规模
-    accumulation: formAddOrEdit.accumulation, // 公积金
-    insurance: formAddOrEdit.insurance, // 五险
-    welfare: formAddOrEdit.welfare, // 福利
-    address: formAddOrEdit.address // 位置
-  })
+  let data
+  if (isAdd.value) {
+    data = await addCompony({
+      name: formAddOrEdit.name, // 公司名
+      logo: formAddOrEdit.logo,
+      industry: formAddOrEdit.industry, // 行业
+      scale: formAddOrEdit.scale, // 规模
+      accumulation: formAddOrEdit.accumulation, // 公积金
+      insurance: formAddOrEdit.insurance, // 五险
+      welfare: formAddOrEdit.welfare, // 福利
+      address: formAddOrEdit.address // 位置
+    })
+  } else {
+    data = await editCompony({
+      id: editId.value,
+      name: formAddOrEdit.name, // 公司名
+      logo: formAddOrEdit.logo,
+      industry: formAddOrEdit.industry, // 行业
+      scale: formAddOrEdit.scale, // 规模
+      accumulation: formAddOrEdit.accumulation, // 公积金
+      insurance: formAddOrEdit.insurance, // 五险
+      welfare: formAddOrEdit.welfare, // 福利
+      address: formAddOrEdit.address // 位置
+    })
+  }
+  console.log('data', data)
+  if (data.code === 200) {
+    getList('refash')
+    dialogVisible.value = false
+  }
 }
-const getList = async () => {
+// 获取列表
+const getList = async (type) => {
+  if (type === 'refash') {
+    console.log('重置刷新')
+  }
   const data = await listCompony({
     limte: 10,
     page: 1
   })
   console.log('list', data)
-  tableData.push(...data)
+  tableData.length = 0
+  tableData.push(...data.data)
+  total.value = data.count
   return {
     ...toRefs(tableData)
   }

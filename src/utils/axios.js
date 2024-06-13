@@ -79,7 +79,7 @@ export default function http(options) {
 				const {code, data} = res;
 				if (code == 200) {
           console.log('成功了！')
-					resolve(res.data);
+					resolve(res);
 				} else if (code && (code == 101 || code == 102 || code.error_msg == "您还没有登录")) { // 101请获取权限 102登录失效
 					ElMessage.error(data.code.error_msg); // 提示错误信息
 					// 登出操作

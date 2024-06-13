@@ -1,11 +1,19 @@
 import axios from "@/utils/axios";
 
 /**
- * 登录
+ * 
  */
 export function addCompony(params) {
 	return axios({
 		url: "/company/add",
+		method: "post",
+		data: params
+	});
+}
+
+export function editCompony(params) {
+	return axios({
+		url: "/company/edit",
 		method: "post",
 		data: params
 	});
