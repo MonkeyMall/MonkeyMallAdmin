@@ -43,7 +43,7 @@
         <el-table-column label="五险" prop="insurance" width="180" />
         <el-table-column label="公积金" prop="accumulation" width="180" />
         <el-table-column label="福利" prop="welfare" width="180" />
-        <el-table-column label="创建时间" prop="date" />
+        <el-table-column label="创建时间" prop="startTime" />
         <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="createFn('edit', scope.row)">
@@ -156,13 +156,14 @@ import CommonLayout from '@/components/CommonLayout'
 // };
 
 import { reactive, ref, toRefs } from 'vue'
-const queryForm = reactive({
+const queryForm = ref({
   name: ''
 })
 console.log('queryForm', queryForm)
 
 const goRouter = () => {
   console.log('goRouter')
+  getList('refash')
 }
 
 const resetFn = () => {
@@ -274,7 +275,9 @@ const getList = async (type) => {
   if (type === 'refash') {
     console.log('重置刷新')
   }
+  console.log('queryForm', queryForm.value)
   const data = await listCompony({
+    name: queryForm.value.name || '',
     limte: 10,
     page: 1
   })

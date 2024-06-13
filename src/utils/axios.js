@@ -41,6 +41,7 @@ export default function http(options) {
 	const method = options.method || "post";
 	const url = options.url;
 	const data = options.data || {};
+  console.log(11, options)
 	if (!options.url) {
 		console.error("url参数缺失");
 		return;
@@ -53,7 +54,7 @@ export default function http(options) {
 			method,
 			baseURL: "",
 			url: url.indexOf("//") > -1 ? url : (server_url + url),
-			params: data,
+			params: options.params,
 			timeout: AXIOS_TIMEOUT,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"

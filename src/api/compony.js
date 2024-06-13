@@ -1,7 +1,7 @@
 import axios from "@/utils/axios";
 
 /**
- * 
+ * 公司相关
  */
 export function addCompony(params) {
 	return axios({
@@ -27,3 +27,45 @@ export function listCompony(params) {
 	});
 }
 
+/**
+ * 侃言相关
+ */
+export function addRidicule(params) {
+	return axios({
+		url: "/ridicule/add",
+		method: "post",
+		data: params
+	});
+}
+
+// export function editCompony(params) {
+// 	return axios({
+// 		url: "/company/edit",
+// 		method: "post",
+// 		data: params
+// 	});
+// }
+
+export function listRidicule(params) {
+	return axios({
+		url: "/ridicule/list",
+		method: "get",
+		params
+	});
+}
+
+export function addCommentRidicule(params) {
+	return axios({
+		url: "/comment/add",
+		method: "post",
+		data: params
+	});
+}
+
+export function listCommentRidicule(params) {
+	return axios({
+		url: "/comment/commentList",
+		method: "post",
+		data: params
+	});
+}

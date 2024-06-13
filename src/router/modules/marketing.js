@@ -42,6 +42,26 @@ export default [
       }
     ]
   },{
+    path: "/ridicule",
+    component: layout,
+    redirect: "/ridicule/index",
+    alwaysShow: true, // will always show the root menu
+    name: "ridicule",
+    meta: {
+      title: "侃言管理",
+      icon: "article"
+    },
+    children: [
+      {
+        path: "/ridicule/index",
+        component: () => import("@/views/ridicule/index.vue"),
+        name: "ridiculeList",
+        meta: {
+          title: "侃言列表", icon: "article-ranking"
+        }
+      }
+    ]
+  },{
     path: "/shopping",
     component: layout,
     redirect: "/shopping/index",
