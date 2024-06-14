@@ -59,6 +59,15 @@ export default [
         meta: {
           title: "侃言列表", icon: "article-ranking"
         }
+      },
+      {
+        path: "/ridicule/info/list",
+        component: () => import("@/views/ridicule/info/list.vue"),
+        name: "ridiculeInfoList",
+        meta: {
+          title: "侃言评论列表", icon: "article-ranking"
+        },
+        hidden: true
       }
     ]
   },{

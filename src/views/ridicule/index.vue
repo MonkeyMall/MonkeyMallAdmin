@@ -36,18 +36,19 @@
     <template #body>
 <!-- 表格 -->
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="分类" prop="category" width="180" />
+        <!-- <el-table-column label="分类" prop="category" width="180" /> -->
         <el-table-column label="标题" prop="title" width="180" />
         <el-table-column label="简介" prop="description" width="180" />
         <el-table-column label="内容" prop="content" width="180" />
         <el-table-column label="是否发布" prop="posted" width="180" />
         <el-table-column label="创建时间" prop="startTime" />
-        <el-table-column fixed="right" label="操作" width="120">
+        <el-table-column fixed="right" label="操作" width="170">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="createFn('edit', scope.row)">
               编辑
             </el-button>
             <el-button link type="primary" size="small" @click="createFn('pl', scope.row)">评论</el-button>
+            <el-button link type="primary" size="small" @click="openKyList(scope.row)">评论列表</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -123,14 +124,18 @@
   </CommonLayout>
 </template>
 <script setup>
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter()
+const route = useRoute();
 import { 
   addRidicule, 
-  editCompony, 
+  editCompony,
   listRidicule,
   addCommentRidicule,
   listCommentRidicule
 } from "@/api/compony.js";
 import CommonLayout from '@/components/CommonLayout'
+
 // import Editor from "../components/Editor.vue";
 // import { ref } from "vue";
 // const detail = ref({});
@@ -208,6 +213,12 @@ const handleSizeChange = (val) => {
 }
 const handleCurrentChange = (val) => {
   console.log('handleCurrentChange', val)
+}
+
+const openKyList = (item) => {
+  router.push({path:'/ridicule/info/list',query: {
+    id: item._id
+  }})
 }
 
 // 关闭弹框
