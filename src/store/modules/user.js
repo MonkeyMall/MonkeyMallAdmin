@@ -86,15 +86,16 @@ export default {
 			});
 		},
 		logout() {
-			resetRouter();
-			this.commit("user/setToken", "");
-			this.commit("user/setUserInfo", {});
-			this.commit("user/setRoles", []);
-			this.commit("user/setButtons", []);
-			this.commit("app/removeTagsView", {
-				type: "all"
-			});
-			removeAllItem();
+      console.log("退出登录")
+			// resetRouter();
+			// this.commit("user/setToken", "");
+			// this.commit("user/setUserInfo", {});
+			// this.commit("user/setRoles", []);
+			// this.commit("user/setButtons", []);
+			// this.commit("app/removeTagsView", {
+			// 	type: "all"
+			// });
+			// removeAllItem();
 			router.push("/login");
 		}
 	}

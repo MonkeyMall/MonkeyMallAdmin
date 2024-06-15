@@ -76,17 +76,16 @@ export default function http(options) {
 		axios(opt).then(res => {
       res = res.data
       console.log('返回数据', res)
-			if (res && (res.code === 200 || res.code === 304 || res.code === 400)) {
-				const {code, data} = res;
+			if (res && (res.code === 200 || res.code === 304 || res.code === 400 || res.code === 501)) {
+				const {code, data, message} = res;
 				if (code == 200) {
-          console.log('成功了！')
 					resolve(res);
-				} else if (code && (code == 101 || code == 102 || code.error_msg == "您还没有登录")) { // 101请获取权限 102登录失效
-					ElMessage.error(data.code.error_msg); // 提示错误信息
+				} else if (code && (code == 501)) { // 501 未登录
+					ElMessage.error(message); // 提示错误信息
 					// 登出操作
 					store.dispatch("user/logout");
 				} else {
-					ElMessage.error(data.code.error_msg || "网络异常，请稍后重试！"); // 提示错误信息
+					ElMessage.error(message || "网络异常，请稍后重试！"); // 提示错误信息
 					reject(data);
 				}
 			} else {

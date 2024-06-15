@@ -38,17 +38,26 @@
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="侃言内容" prop="contentId.content" />
         <el-table-column label="评论" prop="commentContents" />
-        <el-table-column label="用户" prop="userId.username" width="180" />
-        <el-table-column label="创建时间" prop="startTime" width="180" />
-        <!-- <el-table-column fixed="right" label="操作" width="170">
+        <el-table-column label="评论双方" prop="userId.username" width="180">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="createFn('edit', scope.row)">
-              编辑
-            </el-button>
-            <el-button link type="primary" size="small" @click="createFn('pl', scope.row)">评论</el-button>
-            <el-button link type="primary" size="small" @click="openKyList(scope.row)">侃言评论</el-button>
+            <div v-if="scope.row.creatUserId">
+              {{ scope.row.userId.username }} 回复 {{ scope.row.creatUserId.username }}
+            </div>
+            <div v-else>
+              {{ scope.row.userId.username }}
+            </div>
           </template>
-        </el-table-column> -->
+        </el-table-column>
+        <el-table-column label="创建时间" prop="startTime" width="180" />
+        <el-table-column fixed="right" label="操作" width="170">
+          <template #default="scope">
+            <!-- <el-button link type="primary" size="small" @click="createFn('edit', scope.row)">
+              编辑
+            </el-button> -->
+            <el-button link type="primary" size="small" @click="createFn('pl', scope.row)">评论</el-button>
+            <!-- <el-button link type="primary" size="small" @click="openKyList(scope.row)">侃言评论</el-button> -->
+          </template>
+        </el-table-column>
       </el-table>
 <!-- 分页 -->
       <div style="margin-top: 25px;display: flex;justify-content: center;align-items: center;">
@@ -170,6 +179,7 @@ const formPl = ref([
   {
     contentId: '',//评论侃言的ID
     commentContents: '',//评论内容
+    creatUserId: ''// 被评论人
   }
 ])
 const isOrYes = [{
@@ -200,7 +210,8 @@ const createFn = (type, item) => {
     formAddOrEdit.posted = item.posted
   } else {
     isAdd.value = 3
-    formPl.value.contentId = item._id
+    formPl.value.contentId = route.query.id
+    formPl.value.creatUserId = item.userId._id
   }
   dialogVisible.value = true
 }
@@ -240,6 +251,7 @@ const submitFormFn = async () => {
     data = await addCommentRidicule({
       contentId: formPl.value.contentId,
       commentContents: formPl.value.commentContents,
+      creatUserId: formPl.value.creatUserId
     })
   }
   console.log('data', data)
