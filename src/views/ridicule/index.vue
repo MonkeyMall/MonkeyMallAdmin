@@ -41,6 +41,7 @@
         <el-table-column label="简介" prop="description" width="180" />
         <el-table-column label="内容" prop="content" width="180" />
         <el-table-column label="是否发布" prop="posted" width="180" />
+        <el-table-column label="标签" prop="category" width="180" />
         <el-table-column label="创建时间" prop="startTime" />
         <el-table-column fixed="right" label="操作" width="170">
           <template #default="scope">
@@ -78,7 +79,16 @@
           <div v-if="isAdd === 1 || isAdd === 2">
             <el-form :model="formAddOrEdit" label-width="120px">
               <el-form-item label="分类：">
-                <el-input v-model="formAddOrEdit.category" placeholder="请输入分类" />
+                <el-select
+                  v-model="formAddOrEdit.category"
+                  clearable
+                  placeholder="请选择分类">
+                  <el-option
+                    v-for="(item,index) in category"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value" />
+                </el-select>
               </el-form-item>
               <el-form-item label="标题：">
                 <el-input v-model="formAddOrEdit.title" placeholder="请输入标题" />
@@ -132,7 +142,8 @@ import {
   editCompony,
   listRidicule,
   addCommentRidicule,
-  listCommentRidicule
+  listCommentRidicule,
+  editRidicule
 } from "@/api/compony.js";
 import CommonLayout from '@/components/CommonLayout'
 
@@ -182,6 +193,16 @@ const isOrYes = [{
   label: '否',
   value: false
 }]
+const category = [{
+  label: '心灵鸡汤',
+  value: '心灵鸡汤'
+}, {
+  label: '生活感悟',
+  value: '生活感悟'
+}, {
+  label: '工作调侃',
+  value: '工作调侃'
+}]
 const pageSize = ref(10)
 const currentPage = ref(1)
 const total = ref(0)
@@ -197,9 +218,10 @@ const createFn = (type, item) => {
   } else if (type === 'edit') {
     isAdd.value = 2
     editId.value = item._id
+    formAddOrEdit.title = item.title
     formAddOrEdit.category = item.category
     formAddOrEdit.description = item.description
-    formAddOrEdit.contents = item.contents
+    formAddOrEdit.contents = item.content
     formAddOrEdit.posted = item.posted
   } else {
     isAdd.value = 3
@@ -237,14 +259,14 @@ const submitFormFn = async () => {
       contents: formAddOrEdit.contents,
     })
   } else if (isAdd.value === 2) {
-    // data = await editCompony({
-    //   id: editId.value,
-    //   category: formAddOrEdit.category,
-    //   title: formAddOrEdit.title,
-    //   description: formAddOrEdit.description,
-    //   posted: formAddOrEdit.posted,
-    //   contents: formAddOrEdit.contents,
-    // })
+    data = await editRidicule({
+      id: editId.value,
+      category: formAddOrEdit.category,
+      title: formAddOrEdit.title,
+      description: formAddOrEdit.description,
+      posted: formAddOrEdit.posted,
+      contents: formAddOrEdit.contents,
+    })
   } else {
     data = await addCommentRidicule({
       contentId: formPl.value.contentId,

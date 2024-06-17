@@ -38,13 +38,13 @@ export function addRidicule(params) {
 	});
 }
 
-// export function editCompony(params) {
-// 	return axios({
-// 		url: "/company/edit",
-// 		method: "post",
-// 		data: params
-// 	});
-// }
+export function editRidicule(params) {
+	return axios({
+		url: "/ridicule/edit",
+		method: "post",
+		data: params
+	});
+}
 
 export function listRidicule(params) {
 	return axios({
