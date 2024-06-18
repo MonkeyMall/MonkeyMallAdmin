@@ -177,7 +177,6 @@ import { reactive, ref, toRefs } from 'vue'
 const queryForm = ref({
   name: ''
 })
-console.log('queryForm', queryForm)
 
 const goRouter = () => {
   console.log('goRouter')
@@ -339,7 +338,6 @@ const getList = async (type) => {
   if (type === 'refash') {
     console.log('重置刷新')
   }
-  console.log('queryForm', queryForm.value)
   const data = await listCompony({
     name: queryForm.value.name || '',
     limte: 10,

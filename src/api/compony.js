@@ -27,6 +27,14 @@ export function listCompony(params) {
 	});
 }
 
+export function listUser(params) {
+	return axios({
+		url: "/user/list",
+		method: "get",
+		params
+	});
+}
+
 /**
  * 侃言相关
  */

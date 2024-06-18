@@ -136,38 +136,25 @@
     </template>
   </CommonLayout>
 </template>
-<script lang="ts" setup>
+<script setup>
+import { 
+  listUser
+} from "@/api/compony.js"
 import CommonLayout from '@/components/CommonLayout'
-// import Editor from "../components/Editor.vue";
-// import { ref } from "vue";
-// const detail = ref({});
+import { reactive, ref, toRefs } from 'vue'
 
-// detail.value = "富文本编辑器测试输入";
-// // 创建成功
-// const onSuccess = () => {
-// 	console.log("onSuccess");
-// };
-
-import { reactive, ref } from 'vue'
-const queryForm = reactive({
+const queryForm = ref({
   name: ''
 })
-console.log('queryForm', queryForm)
-
 const goRouter = () => {
   console.log('goRouter')
+  getList('refash')
 }
 
 const resetFn = () => {
   console.log('resetFn')
 }
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: '张淼',
-    isVip: true,
-  }
-]
+const tableData = reactive([])
 const formAddOrEdit = [
   {
     name: '', // 用户名
@@ -216,13 +203,26 @@ const handleCurrentChange = (val) => {
   console.log('handleCurrentChange', val)
 }
 
-const handleClose = (done: () => void) => {
-  ElMessageBox.confirm('Are you sure to close this dialog?')
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
+const handleClose = () => {
+  dialogVisible.value = false
 }
+// 获取列表
+const getList = async (type) => {
+  if (type === 'refash') {
+    console.log('重置刷新')
+  }
+  const data = await listUser({
+    name: queryForm.value.name || '',
+    limte: 10,
+    page: 1
+  })
+  console.log('list', data)
+  tableData.length = 0
+  tableData.push(...data.data)
+  total.value = data.count
+  return {
+    ...toRefs(tableData)
+  }
+}
+getList()
 </script>
