@@ -12,6 +12,16 @@ export function login(params) {
 	});
 }
 /**
+ * 注册
+ */
+export function register(params) {
+	return axios({
+		url: "/user/register",
+		method: "post",
+		data: params
+	});
+}
+/**
  * 获取图形验证码
  */
 export function getCode(params) {

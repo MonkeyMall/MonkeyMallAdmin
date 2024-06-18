@@ -83,6 +83,24 @@
             <el-form-item label="logo：">
               <el-input v-model="formAddOrEdit.logo" placeholder="请输入公司logo" />
             </el-form-item>
+            <el-form-item label="融资情况：">
+              <el-select
+                v-model="formAddOrEdit.financing"
+                clearable
+                placeholder="请选择融资情况">
+                <el-option
+                  v-for="(item,index) in financingOptions"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="薪资：">
+              <el-input v-model="formAddOrEdit.wage" placeholder="请输入薪资范围" />
+            </el-form-item>
+            <el-form-item label="技术要求：">
+              <el-input v-model="formAddOrEdit.technical" type="textarea" placeholder="请输入技术要求" />
+            </el-form-item>
             <el-form-item label="地址：">
               <el-input v-model="formAddOrEdit.address" placeholder="请输入公司地址" />
             </el-form-item>
@@ -180,6 +198,9 @@ const formAddOrEdit = reactive([
     insurance: '', // 五险
     welfare: '', // 福利
     address: '', // 位置
+    financing: '',
+    wage: '',
+    technical: ''
   }
 ])
 const scaleList = [{
@@ -199,6 +220,28 @@ const isOrYes = [{
   label: '否',
   value: '0'
 }]
+const financingOptions = [{
+  label: '天使轮',
+  value: '1'
+}, {
+  label: 'A轮',
+  value: '2'
+}, {
+  label: 'B轮',
+  value: '3'
+}, {
+  label: 'C轮',
+  value: '4'
+}, {
+  label: 'D轮',
+  value: '5'
+}, {
+  label: 'E轮',
+  value: '6'
+}, {
+  label: 'IPO',
+  value: '7'
+}]
 const pageSize = ref(10)
 const currentPage = ref(1)
 const total = ref(0)
@@ -211,17 +254,32 @@ const createFn = (type, item) => {
   console.log('创建、编辑')
   if (type === 'add') {
     isAdd.value = true
+    editId.value = ''
+    formAddOrEdit.name = '' // 公司名
+    formAddOrEdit.logo = ''
+    formAddOrEdit.industry = '' // 行业
+    formAddOrEdit.scale = '' // 规模
+    formAddOrEdit.accumulation = '' // 公积金
+    formAddOrEdit.insurance = '' // 五险
+    formAddOrEdit.welfare = '' // 福利
+    formAddOrEdit.address = '' // 位置
+    formAddOrEdit.financing = ''
+    formAddOrEdit.wage = ''
+    formAddOrEdit.technical = ''
   } else {
     isAdd.value = false
     editId.value = item._id
-    formAddOrEdit.name = item.name, // 公司名
-    formAddOrEdit.logo = item.logo,
-    formAddOrEdit.industry = item.industry, // 行业
-    formAddOrEdit.scale = item.scale, // 规模
-    formAddOrEdit.accumulation = item.accumulation, // 公积金
-    formAddOrEdit.insurance = item.insurance, // 五险
-    formAddOrEdit.welfare = item.welfare, // 福利
+    formAddOrEdit.name = item.name // 公司名
+    formAddOrEdit.logo = item.logo
+    formAddOrEdit.industry = item.industry // 行业
+    formAddOrEdit.scale = item.scale // 规模
+    formAddOrEdit.accumulation = item.accumulation // 公积金
+    formAddOrEdit.insurance = item.insurance // 五险
+    formAddOrEdit.welfare = item.welfare // 福利
     formAddOrEdit.address = item.address // 位置
+    formAddOrEdit.financing = item.financing
+    formAddOrEdit.wage = item.wage
+    formAddOrEdit.technical = item.technical
   }
   dialogVisible.value = true
 }
@@ -249,7 +307,10 @@ const submitFormFn = async () => {
       accumulation: formAddOrEdit.accumulation, // 公积金
       insurance: formAddOrEdit.insurance, // 五险
       welfare: formAddOrEdit.welfare, // 福利
-      address: formAddOrEdit.address // 位置
+      address: formAddOrEdit.address, // 位置
+      financing: formAddOrEdit.financing,
+      wage: formAddOrEdit.wage,
+      technical: formAddOrEdit.technical
     })
   } else {
     data = await editCompony({
@@ -261,7 +322,10 @@ const submitFormFn = async () => {
       accumulation: formAddOrEdit.accumulation, // 公积金
       insurance: formAddOrEdit.insurance, // 五险
       welfare: formAddOrEdit.welfare, // 福利
-      address: formAddOrEdit.address // 位置
+      address: formAddOrEdit.address ,// 位置
+      financing: formAddOrEdit.financing,
+      wage: formAddOrEdit.wage,
+      technical: formAddOrEdit.technical
     })
   }
   console.log('data', data)

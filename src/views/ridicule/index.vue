@@ -215,6 +215,12 @@ const createFn = (type, item) => {
   console.log('创建、编辑')
   if (type === 'add') {
     isAdd.value = 1
+    editId.value = ''
+    formAddOrEdit.title = ''
+    formAddOrEdit.category = ''
+    formAddOrEdit.description = ''
+    formAddOrEdit.contents = ''
+    formAddOrEdit.posted = ''
   } else if (type === 'edit') {
     isAdd.value = 2
     editId.value = item._id
