@@ -27,6 +27,10 @@ export const publicRoutes = [
 		path: "/login",
 		component: () => import("@/views/login/index")
 	},
+  {
+		path: "/register",
+		component: () => import("@/views/login/register")
+	},
 	{
 		path: "/",
 		// 注意：带有路径“/”的记录中的组件“默认”是一个不返回 Promise 的函数
