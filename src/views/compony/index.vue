@@ -37,6 +37,11 @@
 <!-- 表格 -->
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="公司名" prop="name" width="180" />
+        <el-table-column label="公司名" prop="name" width="180">
+          <template #default="scope">
+            <el-image style="width: 100px; height: 100px" :src="scope.row.logo" fit="fill" />
+          </template>
+        </el-table-column>
         <el-table-column label="位置" prop="address" width="180" />
         <el-table-column label="行业" prop="industry" width="180" />
         <el-table-column label="规模" prop="scale" width="180" />
@@ -95,17 +100,30 @@
                   :value="item.value" />
               </el-select>
             </el-form-item>
-            <el-form-item label="薪资：">
-              <el-input v-model="formAddOrEdit.wage" placeholder="请输入薪资范围" />
-            </el-form-item>
-            <el-form-item label="技术要求：">
-              <el-input v-model="formAddOrEdit.technical" type="textarea" placeholder="请输入技术要求" />
-            </el-form-item>
             <el-form-item label="地址：">
               <el-input v-model="formAddOrEdit.address" placeholder="请输入公司地址" />
             </el-form-item>
+            <el-form-item label="注册地址：">
+              <el-input v-model="formAddOrEdit.addressZc" placeholder="请输入注册地址" />
+            </el-form-item>
+            <el-form-item label="注册资本：">
+              <el-input v-model="formAddOrEdit.registeredCapital" placeholder="请输入注册资本" />
+            </el-form-item>
+            <el-form-item label="官网：">
+              <el-input v-model="formAddOrEdit.website" placeholder="请输入官网" />
+            </el-form-item>
             <el-form-item label="行业：">
-              <el-input v-model="formAddOrEdit.industry" placeholder="请输入公司行业" />
+              <el-select
+                v-model="formAddOrEdit.industry"
+                clearable
+                multiple
+                placeholder="请选择融资情况">
+                <el-option
+                  v-for="(item,index) in industryOptions"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
             </el-form-item>
             <el-form-item label="规模：">
               <el-select
@@ -144,7 +162,42 @@
               </el-select>
             </el-form-item>
             <el-form-item label="福利：">
-              <el-input v-model="formAddOrEdit.welfare" type="textarea" placeholder="请输入公司福利" />
+              <el-select
+                v-model="formAddOrEdit.welfare"
+                multiple
+                clearable
+                placeholder="请选择公司福利">
+                <el-option
+                  v-for="(item,index) in welfareOptions"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="成立时间：">
+              <el-input v-model="formAddOrEdit.createdDate" placeholder="请输入成立时间" />
+            </el-form-item>
+            <el-form-item label="上班时间：">
+              <el-input v-model="formAddOrEdit.workTime" placeholder="请输入上班时间" />
+            </el-form-item>
+            <el-form-item label="加班时间：">
+              <el-select
+                v-model="formAddOrEdit.overTime"
+                clearable
+                multiple
+                placeholder="请选择加班时间">
+                <el-option
+                  v-for="(item,index) in overTimeOptions"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="薪资：">
+              <el-input v-model="formAddOrEdit.wage" placeholder="请输入薪资范围" />
+            </el-form-item>
+            <el-form-item label="技术要求：">
+              <el-input v-model="formAddOrEdit.technical" type="textarea" placeholder="请输入技术要求" />
             </el-form-item>
           </el-form>
         </div>
@@ -199,18 +252,38 @@ const formAddOrEdit = reactive([
     address: '', // 位置
     financing: '',
     wage: '',
-    technical: ''
+    technical: '',
+    createdDate: '',
+    workTime: '',
+    overTime: '',
+    addressZc: '',
+    registeredCapital: '',
+    website: ''
   }
 ])
+const overTimeOptions = [
+  {
+    label: '双休',
+    value: '1'
+  },
+  {
+    label: '弹性工作',
+    value: '2'
+  },
+  {
+    label: '偶尔加班',
+    value: '3'
+  }
+]
 const scaleList = [{
-  label: '100-500人',
-  value: '100-500人'
+  label: '0-20人',
+  value: '0-20人'
 }, {
-  label: '500-1000人',
-  value: '500-1000人'
+  label: '20-99人',
+  value: '20-99人'
 }, {
-  label: '1000-5000人',
-  value: '1000-5000人'
+  label: '100-499人',
+  value: '100-499人'
 }]
 const isOrYes = [{
   label: '是',
@@ -220,6 +293,13 @@ const isOrYes = [{
   value: '0'
 }]
 const financingOptions = [{
+  label: '未融资',
+  value: '1'
+}, {
+  label: '不需要融资',
+  value: '8'
+},
+{
   label: '天使轮',
   value: '1'
 }, {
@@ -240,6 +320,63 @@ const financingOptions = [{
 }, {
   label: 'IPO',
   value: '7'
+}]
+// 
+const welfareOptions = [{
+  label: '交通补助',
+  value: '1'
+}, {
+  label: '生日福利',
+  value: '2'
+}, {
+  label: '节日福利',
+  value: '3'
+}, {
+  label: '生日福利',
+  value: '4'
+}, {
+  label: '团建聚餐',
+  value: '5'
+}, {
+  label: '零食下午茶',
+  value: '6'
+}, {
+  label: '餐补',
+  value: '7'
+}, {
+  label: '员工旅游',
+  value: '8'
+}, {
+  label: '带薪年假',
+  value: '9'
+}, {
+  label: '加班补助',
+  value: '10'
+}, {
+  label: '企业年金',
+  value: '11'
+}, {
+  label: '年终奖',
+  value: '12'
+}, {
+  label: '定期体检',
+  value: '13'
+}]
+const industryOptions = [{
+  label: '互联网',
+  value: '1'
+}, {
+  label: '企业服务',
+  value: '2'
+}, {
+  label: '通信/网络设备',
+  value: '3'
+}, {
+  label: '计算机软件',
+  value: '4'
+}, {
+  label: '电子商务',
+  value: '5'
 }]
 const pageSize = ref(10)
 const currentPage = ref(1)
@@ -265,20 +402,32 @@ const createFn = (type, item) => {
     formAddOrEdit.financing = ''
     formAddOrEdit.wage = ''
     formAddOrEdit.technical = ''
+    formAddOrEdit.createdDate = ''
+    formAddOrEdit.workTime = ''
+    formAddOrEdit.overTime = ''
+    formAddOrEdit.addressZc = ''
+    formAddOrEdit.registeredCapital = ''
+    formAddOrEdit.website = ''
   } else {
     isAdd.value = false
     editId.value = item._id
     formAddOrEdit.name = item.name // 公司名
     formAddOrEdit.logo = item.logo
-    formAddOrEdit.industry = item.industry // 行业
+    formAddOrEdit.industry = item.industry.split(',') // 行业
     formAddOrEdit.scale = item.scale // 规模
     formAddOrEdit.accumulation = item.accumulation // 公积金
     formAddOrEdit.insurance = item.insurance // 五险
-    formAddOrEdit.welfare = item.welfare // 福利
+    formAddOrEdit.welfare = item.welfare.split(',') // 福利
     formAddOrEdit.address = item.address // 位置
     formAddOrEdit.financing = item.financing
     formAddOrEdit.wage = item.wage
     formAddOrEdit.technical = item.technical
+    formAddOrEdit.createdDate = item.createdDate
+    formAddOrEdit.workTime = item.workTime
+    formAddOrEdit.overTime = item.overTime.split(',')
+    formAddOrEdit.addressZc = item.addressZc
+    formAddOrEdit.registeredCapital = item.registeredCapital
+    formAddOrEdit.website = item.website
   }
   dialogVisible.value = true
 }
@@ -301,30 +450,42 @@ const submitFormFn = async () => {
     data = await addCompony({
       name: formAddOrEdit.name, // 公司名
       logo: formAddOrEdit.logo,
-      industry: formAddOrEdit.industry, // 行业
+      industry: formAddOrEdit.industry.join(','), // 行业
       scale: formAddOrEdit.scale, // 规模
       accumulation: formAddOrEdit.accumulation, // 公积金
       insurance: formAddOrEdit.insurance, // 五险
-      welfare: formAddOrEdit.welfare, // 福利
+      welfare: formAddOrEdit.welfare.join(','), // 福利
       address: formAddOrEdit.address, // 位置
       financing: formAddOrEdit.financing,
       wage: formAddOrEdit.wage,
-      technical: formAddOrEdit.technical
+      technical: formAddOrEdit.technical,
+      createdDate: formAddOrEdit.createdDate,
+      workTime: formAddOrEdit.workTime,
+      overTime: formAddOrEdit.overTime.join(','),
+      addressZc: formAddOrEdit.addressZc,
+      registeredCapital: formAddOrEdit.registeredCapital,
+      website: formAddOrEdit.website
     })
   } else {
     data = await editCompony({
       id: editId.value,
       name: formAddOrEdit.name, // 公司名
       logo: formAddOrEdit.logo,
-      industry: formAddOrEdit.industry, // 行业
+      industry: formAddOrEdit.industry.join(','), // 行业
       scale: formAddOrEdit.scale, // 规模
       accumulation: formAddOrEdit.accumulation, // 公积金
       insurance: formAddOrEdit.insurance, // 五险
-      welfare: formAddOrEdit.welfare, // 福利
+      welfare: formAddOrEdit.welfare.join(','), // 福利
       address: formAddOrEdit.address ,// 位置
       financing: formAddOrEdit.financing,
       wage: formAddOrEdit.wage,
-      technical: formAddOrEdit.technical
+      technical: formAddOrEdit.technical,
+      createdDate: formAddOrEdit.createdDate,
+      workTime: formAddOrEdit.workTime,
+      overTime: formAddOrEdit.overTime.join(','),
+      addressZc: formAddOrEdit.addressZc,
+      registeredCapital: formAddOrEdit.registeredCapital,
+      website: formAddOrEdit.website
     })
   }
   console.log('data', data)
