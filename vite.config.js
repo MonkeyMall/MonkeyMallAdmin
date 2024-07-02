@@ -43,8 +43,8 @@ export default defineConfig({
 			"/api": {
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, ""),
-        // target: "http://47.121.121.204:8080/api/"
-				target: "http://localhost:8080/api/"
+        target: "http://47.121.121.204:8080/api/"
+				// target: "http://localhost:8080/api/"
 
 			}
 		}
