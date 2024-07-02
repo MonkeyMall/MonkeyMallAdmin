@@ -77,7 +77,7 @@
       <el-dialog
         v-model="dialogVisible"
         :title="isAdd ? '创建公司' : '编辑公司'"
-        width="500"
+        width="900"
         :before-close="handleClose"
         >
         <div>
@@ -277,6 +277,10 @@ const overTimeOptions = [
   {
     label: '偶尔加班',
     value: '3'
+  },
+  {
+    label: '不加班',
+    value: '4'
   }
 ]
 const scaleList = [{
@@ -368,6 +372,9 @@ const welfareOptions = [{
 }, {
   label: '全勤奖',
   value: '14'
+},{
+  label: '学历津贴',
+  value: '15'
 }]
 const industryOptions = [{
   label: '暂无',
@@ -387,6 +394,9 @@ const industryOptions = [{
 }, {
   label: '电子商务',
   value: '5'
+}, {
+  label: '环保',
+  value: '6'
 }]
 const pageSize = ref(10)
 const currentPage = ref(1)
@@ -427,14 +437,14 @@ const createFn = (type, item) => {
     formAddOrEdit.scale = item.scale // 规模
     formAddOrEdit.accumulation = item.accumulation // 公积金
     formAddOrEdit.insurance = item.insurance // 五险
-    formAddOrEdit.welfare = item.welfare.split(',') // 福利
+    formAddOrEdit.welfare = item.welfare ? item.welfare.split(',') : '' // 福利
     formAddOrEdit.address = item.address // 位置
     formAddOrEdit.financing = item.financing
     formAddOrEdit.wage = item.wage
     formAddOrEdit.technical = item.technical
     formAddOrEdit.createdDate = item.createdDate
     formAddOrEdit.workTime = item.workTime
-    formAddOrEdit.overTime = item.overTime.split(',')
+    formAddOrEdit.overTime = item.overTime ? item.overTime.split(',') : ''
     formAddOrEdit.addressZc = item.addressZc
     formAddOrEdit.registeredCapital = item.registeredCapital
     formAddOrEdit.website = item.website
@@ -464,14 +474,14 @@ const submitFormFn = async () => {
       scale: formAddOrEdit.scale, // 规模
       accumulation: formAddOrEdit.accumulation, // 公积金
       insurance: formAddOrEdit.insurance, // 五险
-      welfare: formAddOrEdit.welfare.join(','), // 福利
+      welfare: formAddOrEdit.welfare ? formAddOrEdit.welfare.join(',') : '', // 福利
       address: formAddOrEdit.address, // 位置
       financing: formAddOrEdit.financing,
       wage: formAddOrEdit.wage,
       technical: formAddOrEdit.technical,
       createdDate: formAddOrEdit.createdDate,
       workTime: formAddOrEdit.workTime,
-      overTime: formAddOrEdit.overTime.join(','),
+      overTime: formAddOrEdit.overTime ? formAddOrEdit.overTime.join(',') : '',
       addressZc: formAddOrEdit.addressZc,
       registeredCapital: formAddOrEdit.registeredCapital,
       website: formAddOrEdit.website
@@ -492,7 +502,7 @@ const submitFormFn = async () => {
       technical: formAddOrEdit.technical,
       createdDate: formAddOrEdit.createdDate,
       workTime: formAddOrEdit.workTime,
-      overTime: formAddOrEdit.overTime.join(','),
+      overTime: formAddOrEdit.overTime ? formAddOrEdit.overTime.join(',') : '',
       addressZc: formAddOrEdit.addressZc,
       registeredCapital: formAddOrEdit.registeredCapital,
       website: formAddOrEdit.website
